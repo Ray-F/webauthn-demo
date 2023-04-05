@@ -1,0 +1,18 @@
+{
+  "name": "webauthn-demo",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:UOA-CS732-SE750-Students-2023/cs732-se75-assignment-Ray-F.git",
+  "author": "Raymond Feng <rf.raymondfeng@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "prettify": "prettier --write packages/*/src"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  }
+}
