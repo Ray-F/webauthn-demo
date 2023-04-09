@@ -9,6 +9,9 @@ const API_ENDPOINT = import.meta.env.API_ENDPOINT || "http://localhost:9000";
 
 let sessionToken: string | undefined = undefined;
 
+/**
+ * Wrapper for fetch POST request.
+ */
 const usePostRequest = async (endpoint: string, body?: any) => {
   const resp = await fetch(`${API_ENDPOINT}${endpoint}`, {
     method: "POST",
@@ -19,6 +22,9 @@ const usePostRequest = async (endpoint: string, body?: any) => {
   return resp;
 };
 
+/**
+ * WebAuthn related request to to the server to retrieve generated registration options.
+ */
 const useRegistrationOptions = async (email: string) => {
   const resp = await usePostRequest("/register-options", { email });
   if (resp.ok) {
@@ -31,6 +37,9 @@ const useRegistrationOptions = async (email: string) => {
   }
 };
 
+/**
+ * WebAuthn related request to store/validate credentials + challenge on the server.
+ */
 const useRegister = async (email: string, credential: any) => {
   const resp = await usePostRequest("/register", { email, credential });
 
@@ -39,6 +48,9 @@ const useRegister = async (email: string, credential: any) => {
   }
 };
 
+/**
+ * WebAuthn related request to to the server to retrieve generated login options.
+ */
 const useLoginOptions = async (email: string) => {
   const resp = await usePostRequest("/authenticate-options", { email });
   if (resp.ok) {
@@ -51,6 +63,9 @@ const useLoginOptions = async (email: string) => {
   }
 };
 
+/**
+ * WebAuthn related request to validate signed challenge on the server.
+ */
 const useLogin = async (email: string, credential: any) => {
   const resp = await usePostRequest("/authenticate", { email, credential });
 
@@ -58,7 +73,7 @@ const useLogin = async (email: string, credential: any) => {
     const { token } = await resp.json();
     alert("Successfully logged in!");
 
-    sessionToken = token;
+    return token;
   }
 };
 
@@ -66,6 +81,7 @@ export function Authentication() {
   const [email, setEmail] = useState("");
   const [restrictedData, setRestrictedData] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [sessionToken, setSessionToken] = useState("");
 
   /*
    * Web Authentication API
@@ -106,20 +122,27 @@ export function Authentication() {
     const reqOptions: any = await useLoginOptions(email);
 
     /*
-     * Steps 5-7 of the Authentication Workflow.
+     * Steps 5-7 of the Authentication Workflow
      *
      * Initiates the authentication process using `...credentials.get(...)`
      * webAuthn API behind the SimpleWebAuthn wrapper.
      */
     const authCredential = await startAuthentication(reqOptions);
 
-    await useLogin(email, authCredential);
+    /**
+     * Steps 8 - 10 of the Authentication Workflow
+     *
+     * Passes the signed challenge back to the server/relying party for verification.
+     */
+    const token = await useLogin(email, authCredential);
+    setSessionToken(token);
 
+    // Set state of UI to be logged in.
     setEmail("");
     setIsLoggedIn(true);
   };
 
-  const onFetchDataBtn = async () => {
+  const onFetchDataBtnPress = async () => {
     const resp = await fetch(`${API_ENDPOINT}/restricted-content`, {
       method: "GET",
       headers: {
@@ -187,7 +210,7 @@ export function Authentication() {
           </p>
 
           <p className={styles.restrictedContent}>{restrictedData}</p>
-          <button onClick={onFetchDataBtn}>Click to fetch content</button>
+          <button onClick={onFetchDataBtnPress}>Click to fetch content</button>
         </div>
       </div>
     </>

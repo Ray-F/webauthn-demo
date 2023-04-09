@@ -9,10 +9,6 @@ import express, { json } from "express";
 import { Authenticator, User, UserRepository } from "./user.repo";
 import crypto from "crypto";
 
-const RP_NAME = "Raymond's WebAuthn Demo";
-const RP_ID = "localhost"; // configure to be actual domain name in environment
-const RP_ORIGIN = "http://localhost:5173"; // configure to be remote client host
-
 // Create a basic express server with minimal dependencies for clarity
 const app = express();
 app.use(json(), cors());
@@ -54,6 +50,14 @@ router.get("/restricted-content", (req, res, next) => {
     res.sendStatus(403);
   }
 });
+
+/**
+ * The following are WebAuthn related routes / variables.
+ */
+
+const RP_NAME = "Raymond's WebAuthn Demo";
+const RP_ID = "localhost"; // configure to be actual domain name in environment
+const RP_ORIGIN = "http://localhost:5173"; // configure to be remote client host
 
 /**
  * Retrieves registration options to pass into the browser's WebAuthn API.
