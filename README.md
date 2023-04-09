@@ -1,6 +1,6 @@
 # WebAuthn API Demo
 
-Created by Raymond Feng.
+Created by Raymond Feng for SE750.
 
 ### Prerequisites
 
@@ -27,4 +27,7 @@ Start the server
 yarn workspace @webauthn-demo/server dev
 ```
 
-Navigate to [http://localhost:5137](http://localhost:5137) to access the local development environment.
+Navigate to [http://localhost:5173](http://localhost:5173) to access the local development environment.
+
+IMPORTANT: This must be `localhost` and not any other equivalent (e.g. 127.0.0.1) or else the WebAuthn API
+will not let the demo run, as the API standard does not support non HTTPS contexts other than the explicit 'localhost'
