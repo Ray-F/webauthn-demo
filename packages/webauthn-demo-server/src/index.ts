@@ -8,7 +8,6 @@ import cors from "cors";
 import express, { json } from "express";
 import { Authenticator, User, UserRepository } from "./user.repo";
 import crypto from "crypto";
-import cookieParser from "cookie-parser";
 
 const RP_NAME = "Raymond's WebAuthn Demo";
 const RP_ID = "localhost"; // configure to be actual domain name in environment
@@ -16,11 +15,16 @@ const RP_ORIGIN = "http://localhost:5173"; // configure to be remote client host
 
 // Create a basic express server with minimal dependencies for clarity
 const app = express();
-app.use(json());
-app.use(cors());
-app.use(cookieParser());
+app.use(json(), cors());
+
 const router = express.Router();
 app.use(router);
+
+// Start the app on port 9000
+const port = process.env.PORT || 9000;
+app.listen(port, () => {
+  console.log(`Server started, listening to port: ${port}`);
+});
 
 /**
  * Creates a new data store for users.
@@ -30,11 +34,10 @@ const userRepo = new UserRepository();
 /**
  * NOT PART OF WEBAUTHN/AUTHENTICATION
  *
- * Used as a primitive cookie session technique that demonstrates what
+ * Used as a primitive session technique that demonstrates what
  * happens after a user has been authenticated via web authn.
  */
 const authorizedSessionIds = new Set<string>();
-
 router.get("/restricted-content", (req, res, next) => {
   const sessionId = req.headers.authorization;
   if (!sessionId) {
@@ -52,10 +55,14 @@ router.get("/restricted-content", (req, res, next) => {
   }
 });
 
+/**
+ * Retrieves registration options to pass into the browser's WebAuthn API.
+ */
 router.post("/register-options", (req, res, next) => {
   const { email } = req.body;
 
-  if (userRepo.exists(email)) {
+  const existingUser = userRepo.get(email);
+  if (!!existingUser?.authenticator) {
     res.status(409).send(`User with email "${email}" already exists!`);
     return;
   }
@@ -81,7 +88,9 @@ router.post("/register-options", (req, res, next) => {
   res.status(201).json(options);
 });
 
-// Registers a new user
+/**
+ * Registers a new user.
+ */
 router.post("/register", async (req, res, next) => {
   const { email, credential } = req.body;
 
@@ -120,6 +129,9 @@ router.post("/register", async (req, res, next) => {
   userRepo.save(user);
 });
 
+/**
+ * Retrieves options for generating an authentication request on the browser's WebAuthn API.
+ */
 router.post("/authenticate-options", (req, res, next) => {
   const { email } = req.body;
 
@@ -147,7 +159,10 @@ router.post("/authenticate-options", (req, res, next) => {
   res.status(201).json(options);
 });
 
-// Authenticates an existing user
+/**
+ * Authenticates an existing user by providing the user with a session ID that is then attached
+ * to all future resource requests.
+ */
 router.post("/authenticate", async (req, res, next) => {
   const { email, credential } = req.body;
 
@@ -180,6 +195,7 @@ router.post("/authenticate", async (req, res, next) => {
 
   const { verified } = verification;
   if (verified) {
+    // This section is not part of WebAuthn - just some basic authorization w/ sessions
     const randomSessionToken = crypto.randomUUID();
     authorizedSessionIds.add(randomSessionToken);
 
@@ -194,10 +210,4 @@ router.post("/authenticate", async (req, res, next) => {
 
   user.authenticator.counter = newCounter;
   userRepo.save(user);
-});
-
-// Start the app on port 9000
-const port = process.env.PORT || 9000;
-app.listen(port, () => {
-  console.log(`Server started, listening to port: ${port}`);
 });

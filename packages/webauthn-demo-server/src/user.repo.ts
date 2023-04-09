@@ -4,10 +4,6 @@
 class UserRepository {
   private userStore = new Map<string, User>();
 
-  public exists(email: string) {
-    return this.userStore.has(this.emailToId(email));
-  }
-
   public get(email: string) {
     return this.userStore.get(this.emailToId(email));
   }
