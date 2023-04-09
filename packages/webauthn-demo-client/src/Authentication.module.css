@@ -6,7 +6,7 @@ body {
 
 .pageLeft {
   background: linear-gradient(45deg, rgb(50, 120, 177), rgb(134, 72, 171));
-  
+
   /* Center align contents (i.e. login box) */
   height: 100vh;
   width: 50%;
@@ -45,7 +45,7 @@ body {
 }
 
 .container {
-  font-family: 'Tahoma', sans-serif;
+  font-family: "Tahoma", sans-serif;
   text-align: center;
 
   margin: 50px 0;
@@ -80,7 +80,7 @@ body {
   margin-bottom: 50px;
 }
 
-.pageLeft input[type='submit'] {
+.pageLeft input[type="submit"] {
   display: block;
   margin: 10px auto;
   padding: 15px;
@@ -92,7 +92,7 @@ body {
 }
 
 .loginBtn {
-  background-color:rgb(50, 120, 177);
+  background-color: rgb(50, 120, 177);
 }
 
 .registerBtn {
@@ -100,7 +100,7 @@ body {
 }
 
 .restrictedContentContainer {
-  font-family: 'Tahoma', sans-serif;
+  font-family: "Tahoma", sans-serif;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -124,5 +124,5 @@ body {
   color: white;
   cursor: pointer;
 
-  background: rgb(50, 120, 177)
+  background: rgb(50, 120, 177);
 }

@@ -114,7 +114,7 @@ export function Authentication() {
     const authCredential = await startAuthentication(reqOptions);
 
     await useLogin(email, authCredential);
-    
+
     setEmail("");
     setIsLoggedIn(true);
   };
@@ -146,7 +146,6 @@ export function Authentication() {
           <h1 className={styles.title}>Passwordless Login</h1>
           <p>Implemented using FIDO2's Web Authentication API (WebAuthn).</p>
           <hr />
-
 
           {isLoggedIn ? (
             <>
@@ -187,9 +186,7 @@ export function Authentication() {
             restricted content
           </p>
 
-          <p className={styles.restrictedContent}>
-            {restrictedData}
-          </p>
+          <p className={styles.restrictedContent}>{restrictedData}</p>
           <button onClick={onFetchDataBtn}>Click to fetch content</button>
         </div>
       </div>

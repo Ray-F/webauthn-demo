@@ -29,13 +29,13 @@ const userRepo = new UserRepository();
 
 /**
  * NOT PART OF WEBAUTHN/AUTHENTICATION
- * 
+ *
  * Used as a primitive cookie session technique that demonstrates what
  * happens after a user has been authenticated via web authn.
  */
 const authorizedSessionIds = new Set<string>();
 
-router.get('/restricted-content', (req, res, next) => {
+router.get("/restricted-content", (req, res, next) => {
   const sessionId = req.headers.authorization;
   if (!sessionId) {
     res.sendStatus(401);
@@ -45,11 +45,12 @@ router.get('/restricted-content', (req, res, next) => {
   if (authorizedSessionIds.has(sessionId)) {
     res.status(200).send(
       `Congrats! This is a top secret message you would only see after being 
-      authenticated, and receive a special session token stored as a cookie.`);
+      authenticated, and receive a special session token stored as a cookie.`
+    );
   } else {
     res.sendStatus(403);
   }
-})
+});
 
 router.post("/register-options", (req, res, next) => {
   const { email } = req.body;
@@ -103,10 +104,9 @@ router.post("/register", async (req, res, next) => {
   if (verified) {
     res.sendStatus(201);
   } else {
-    res.status(403).send("Failed to register new user")
+    res.status(403).send("Failed to register new user");
     return;
   }
-
 
   const { registrationInfo } = verification;
   const newAuth: Authenticator = {
@@ -158,10 +158,10 @@ router.post("/authenticate", async (req, res, next) => {
     res.sendStatus(404);
     return;
   }
-  
+
   const authenticator = user.authenticator!!;
 
-  if (authenticator.credentialId.toString('base64url') != credential.id) {
+  if (authenticator.credentialId.toString("base64url") != credential.id) {
     res.status(401).send("No such authenticator registered with this user");
     return;
   }

@@ -1,2 +1,2 @@
-declare module '*.css';
-import 'vite/client';
+declare module "*.css";
+import "vite/client";
