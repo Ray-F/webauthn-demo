@@ -4,8 +4,10 @@ Created by Raymond Feng for SE750.
 
 ### Prerequisites
 
-You need to have `yarn` package manager installed. Steps to install this can be 
+You need to have `yarn` (classic stable, v1.22.19) package manager installed. Steps to install this can be 
 found [here](https://classic.yarnpkg.com/en/docs/install#mac-stable)
+
+You need to have `node` version 16+ installed.
 
 You need a [WebAuthn capable browser](https://webauthn.me/browser-support). A bonus is to give a device capable of 
 biometrics (e.g. Touch ID, Face ID, Windows Hello). 
