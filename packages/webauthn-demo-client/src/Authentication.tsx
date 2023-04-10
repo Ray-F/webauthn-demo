@@ -75,6 +75,9 @@ const useLogin = async (email: string, credential: any) => {
     alert("Successfully logged in!");
 
     return token;
+  } else {
+    alert("Failed to login, did you register with this email first?");
+    throw new Error("Invalid user authentication");
   }
 };
 
