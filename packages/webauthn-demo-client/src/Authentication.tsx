@@ -5,7 +5,7 @@ import {
   startRegistration,
 } from "@simplewebauthn/browser";
 
-const API_ENDPOINT = import.meta.env.API_ENDPOINT || "http://localhost:9000";
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || "http://localhost:9000";
 
 let sessionToken: string | undefined = undefined;
 
