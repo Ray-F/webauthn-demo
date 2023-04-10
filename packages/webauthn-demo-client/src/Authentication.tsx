@@ -5,7 +5,8 @@ import {
   startRegistration,
 } from "@simplewebauthn/browser";
 
-const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || "http://localhost:9000";
+const API_ENDPOINT =
+  import.meta.env.VITE_API_ENDPOINT || "http://localhost:9000";
 
 let sessionToken: string | undefined = undefined;
 
@@ -184,19 +185,16 @@ export function Authentication() {
                 placeholder="Enter your email"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <input
-                className={styles.loginBtn}
-                type="submit"
-                value="Login"
-                onClick={onLoginBtnPress}
-              />
+              <button className={styles.loginBtn} onClick={onLoginBtnPress}>
+                Login
+              </button>
               <p>or</p>
-              <input
+              <button
                 className={styles.registerBtn}
-                type="submit"
-                value="Register"
                 onClick={onRegisterBtnPress}
-              />
+              >
+                Register
+              </button>
             </>
           )}
         </div>
